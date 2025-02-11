@@ -6,7 +6,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
+
 const app = express();
+
+// 🔗 Connect to MongoDB
+connectDB();
 
 // 🛡️ Security & performance middlewares
 app.use(helmet());
@@ -19,6 +25,9 @@ app.use(morgan("dev"));
 app.get('/', (req, res) => {
     res.send('🌲 Welcome to TreeChat API 🌲');
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // 🚀 Start the server
 const PORT = process.env.PORT;
