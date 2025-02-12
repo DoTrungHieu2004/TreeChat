@@ -10,9 +10,11 @@ const corsConfig = require('./config/corsConfig');
 const { globalLimiter } = require('./middlewares/rateLimiter');
 const logger = require('./config/logger');
 const sessionMiddleware = require('./config/sessionConfig');
+
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
@@ -37,6 +39,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/chat', chatRoutes);
 
 // 🚀 Start the server
 const PORT = process.env.PORT;
