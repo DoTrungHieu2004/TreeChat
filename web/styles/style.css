@@ -55,14 +55,28 @@ body {
     margin-top: 10px;
 }
 
+.auth-container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #000000;
+    border: 5px solid #ff00ff;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px #ff00ff;
+}
+
+.auth-container h2 {
+    color: yellow;
+}
+
 input {
-    flex: 1;
+    width: 90%;
+    margin: 10px 0;
     padding: 10px;
     font-size: 16px;
     border: 3px solid #ff00ff;
     background: #000;
     color: yellow;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
 button {

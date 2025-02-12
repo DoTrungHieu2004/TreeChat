@@ -6,8 +6,9 @@
     <title>🌲 TreeChat - Retro AI Chatbot</title>
     <link rel="stylesheet" href="styles/style.css">
     <script defer src="scripts/chat.js"></script>
+    <script defer src="scripts/auth.js"></script>
 </head>
-<body>
+<body onload="checkAuth()">
     <marquee class="header">🌲 Welcome to TreeChat - The AI Chatbot with a Retro Twist! 🌲</marquee>
 
     <div class="chat-container">
@@ -19,6 +20,9 @@
             <input type="text" id="user-input" placeholder="Type a message..." autofocus>
             <button onclick="sendMessage()">📩 Send</button>
         </div>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
     </div>
+
+    <footer>&#169; 2025 The TreeChat Co. - A Hieu10 Company 🚀</footer>
 </body>
 </html>

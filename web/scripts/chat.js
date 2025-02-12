@@ -1,6 +1,8 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 
+const token = localStorage.getItem('token');
+
 // Function to add messages to the chat UI
 function addMessage(text, sender) {
     const messageDiv = document.createElement('div');
@@ -23,7 +25,7 @@ async function sendMessage() {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": "Bearer YOUR_JWT_TOKEN_HERE"
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ message })
         });
