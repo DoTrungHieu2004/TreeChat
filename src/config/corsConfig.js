@@ -8,7 +8,7 @@ const corsOptions = {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            callback(new Error("🚫 CORS Policy: Not allowed byy CORS!"));
+            callback(new Error("🚫 CORS Policy: Not allowed by CORS!"));
         }
     },
     credentials: true, // Allow cookies & authentication headers
