@@ -35,7 +35,7 @@ class ArborMind {
         logger.info("✅ ArborMind AI is ready! 🚀");
     }
 
-    async getResponse(text) {
+    async getResponse(userId, text) {
         const response = await this.manager.process("en", text);
 
         // Save conversaton context
