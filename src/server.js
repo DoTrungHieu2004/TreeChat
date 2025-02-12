@@ -8,6 +8,8 @@ const compression = require('compression');
 
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 🚀 Start the server
 const PORT = process.env.PORT;
