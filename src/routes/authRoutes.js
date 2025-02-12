@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { loginLimiter } = require('../middlewares/rateLimiter');
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.post('/register', async (req, res) => {
 });
 
 // 🔑 Login user
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
