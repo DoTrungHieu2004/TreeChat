@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 body {
     background: url('../assets/retro-background.gif');
     font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -39,6 +49,7 @@ body {
 }
 
 .bot-message, .user-message {
+    animation: fadeIn 0.3s ease-in-out;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
@@ -53,6 +64,19 @@ body {
 .input-area {
     display: flex;
     margin-top: 10px;
+}
+
+.typing {
+    display: inline-block;
+    font-size: 14px;
+    font-style: italic;
+    color: yellow;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .auth-container {
@@ -85,9 +109,11 @@ button {
     border: 3px solid #000;
     padding: 10px;
     font-size: 16px;
+    transition: transform 0.2s ease-in-out;
     cursor: pointer;
 }
 
 button:hover {
     background: #ff4500;
+    transform: scale(1.1);
 }

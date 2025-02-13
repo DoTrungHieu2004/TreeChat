@@ -1,5 +1,7 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
+const sendSound = document.getElementById('send-sound');
+const receiveSound = document.getElementById('receive-sound');
 
 const token = localStorage.getItem('token');
 
@@ -9,7 +11,11 @@ function addMessage(text, sender) {
     messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
     messageDiv.textContent = text;
     chatBox.appendChild(messageDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    scrollToBottom();
+
+    // Play sound effects
+    if (sender === 'user') sendSound.play();
+    else receiveSound.play();
 }
 
 // Function to send messages to the server
@@ -19,6 +25,13 @@ async function sendMessage() {
 
     addMessage(`👤 You: ${message}`, 'user');
     userInput.value = "";
+
+    // Typing indicator
+    const typingIndicator = document.createElement('div');
+    typingIndicator.classList.add('typing');
+    typingIndicator.textContent = '🤖 ArborMind is typing...';
+    chatBox.appendChild(typingIndicator);
+    scrollToBottom();
 
     try {
         const response = await fetch('http://localhost:5000/api/chat', {
@@ -31,8 +44,18 @@ async function sendMessage() {
         });
 
         const data = await response.json();
+
+        // Remove typing indicator
+        typingIndicator.remove();
+
+        // Display bot response
         addMessage(`🤖 ArborMind: ${data.response}`, 'bot');
     } catch (error) {
         addMessage('🚫 Error connecting to server!', 'bot');
     }
+}
+
+// Auto-scroll & keep chat at the bottom
+function scrollToBottom() {
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
