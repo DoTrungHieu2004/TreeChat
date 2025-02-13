@@ -5,6 +5,8 @@ const receiveSound = document.getElementById('receive-sound');
 
 const token = localStorage.getItem('token');
 
+const socket = io('http://localhost:3000');
+
 // Function to add messages to the chat UI
 function addMessage(text, sender) {
     const messageDiv = document.createElement('div');
@@ -59,6 +61,11 @@ async function sendMessage() {
 function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+// 📩 Listen for incoming messages in real time
+socket.on("message", (message) => {
+    addMessage(`${msg.sender === "user" ? "👤 You" : "🤖 ArborMind"}: ${msg.text}`, message.sender);
+});
 
 // Fetch and display chat history
 async function loadChatHistory() {
