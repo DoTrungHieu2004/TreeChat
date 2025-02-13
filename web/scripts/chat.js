@@ -59,3 +59,24 @@ async function sendMessage() {
 function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+// Fetch and display chat history
+async function loadChatHistory() {
+    try {
+        const response = await fetch('http://localhost:5000/api/chat/history', {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("token")}`
+            }
+        });
+
+        const messages = await response.json();
+        messages.forEach(msg => {
+            addMessage(`${msg.sender === "user" ? "👤 You" : "🤖 ArborMind"}: ${msg.text}`, msg.sender);
+        });
+    } catch (error) {
+        console.error('🚫 Error loading chat history', error);
+    }
+}
+
+// Call loadChatHistory() when page loads
+document.addEventListener('DOMContentLoaded', loadChatHistory);
