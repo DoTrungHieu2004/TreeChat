@@ -9,7 +9,7 @@ function setupChatRoutes(io) {
     // 📩 Handle user chat input & store messages
     router.post('/', authenticateUser, async (req, res) => {
         try {
-            const { message } = req.body;
+            const { message, room } = req.body;
             const userId = req.user.id;
 
             if (!message) {
@@ -18,15 +18,13 @@ function setupChatRoutes(io) {
 
             // 📝 Save user messages
             const userMessage = await Message.create({ user: userId, sender: "user", text: message });
-            io.emit("message", userMessage);
+            io.to(room).emit("message", userMessage);
 
             // 🤖 Get chatbot response
             const botResponse = await ArborMind.getResponse(userId, message);
-
-            // 📝 Save bot response
             const botMessage = await Message.create({ user: userId, sender: "bot", text: botResponse });
 
-            io.emit("message", botMessage);
+            io.to(room).emit("message", botMessage);
 
             res.json({ response: botResponse });
         } catch (error) {

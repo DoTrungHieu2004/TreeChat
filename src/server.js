@@ -54,6 +54,26 @@ app.use('/api/chat', setupChatRoutes(io));
 io.on("connection", (socket) => {
     console.log("🔌 User connected: ", socket.id);
 
+    // 📡 Join a room
+    socket.on("joinRoom", (room) => {
+        socket.join(room);
+        console.log(`🏠 User ${socket.id} joined room: ${room}`);
+        io.to(room).emit("message", {
+            sender: "system",
+            text: `📢 A user joined ${room}`
+        });
+    });
+
+    // ✍️ Typing indicator
+    socket.on("typing", (data) => {
+        socket.to(data.room).emit("userTyping", data.username);
+    });
+
+    socket.on("stopTyping", (room) => {
+        socket.to(room).emit("userStoppedTyping");
+    });
+
+    // ❌ Handle disconnection
     socket.on("disconnect", () => {
         console.log("❌ User disconnected: ", socket.id);
     });

@@ -3,6 +3,8 @@ const userInput = document.getElementById('user-input');
 const sendSound = document.getElementById('send-sound');
 const receiveSound = document.getElementById('receive-sound');
 
+let currentRoom = "general";
+const username = localStorage.getItem("username") || "User";
 const token = localStorage.getItem('token');
 
 const socket = io('http://localhost:3000');
@@ -20,6 +22,20 @@ function addMessage(text, sender) {
     else receiveSound.play();
 }
 
+// Listen for incoming messages in real time
+socket.on("message", (message) => {
+    addMessage(`${msg.sender === "user" ? "👤 You" : "🤖 ArborMind"}: ${msg.text}`, message.sender);
+});
+
+// Listen for typing events
+socket.on("userTyping", (username) => {
+    document.getElementById('typing-indicator').innerText = `✍️ ${username} is typing...`;
+});
+
+socket.on("userStoppedTyping", () => {
+    document.getElementById('typing-indicator').innerText = "";
+});
+
 // Function to send messages to the server
 async function sendMessage() {
     const message = userInput.value.trim();
@@ -27,6 +43,8 @@ async function sendMessage() {
 
     addMessage(`👤 You: ${message}`, 'user');
     userInput.value = "";
+
+    socket.emit("stopTyping", currentRoom);
 
     // Typing indicator
     const typingIndicator = document.createElement('div');
@@ -62,11 +80,6 @@ function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// 📩 Listen for incoming messages in real time
-socket.on("message", (message) => {
-    addMessage(`${msg.sender === "user" ? "👤 You" : "🤖 ArborMind"}: ${msg.text}`, message.sender);
-});
-
 // Fetch and display chat history
 async function loadChatHistory() {
     try {
@@ -87,3 +100,29 @@ async function loadChatHistory() {
 
 // Call loadChatHistory() when page loads
 document.addEventListener('DOMContentLoaded', loadChatHistory);
+
+// Join default room
+socket.emit("joinRoom", currentRoom);
+
+function changeRoom() {
+    const newRoom = document.getElementById('room-select').value;
+    socket.emit("joinRoom", newRoom);
+    currentRoom = newRoom;
+    document.getElementById('chat-box').innerHTML = ""; // Clear chat UI
+}
+
+// Typing indicator
+let typingTimeout;
+function sendTyping() {
+    socket.emit("typing", { username, room: currentRoom });
+
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        socket.emit("stopTyping", currentRoom);
+    }, 3000);
+}
+
+function stopTyping() {
+    clearTimeout(typingTimeout);
+    socket.emit("stopTyping", currentRoom);
+}

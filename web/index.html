@@ -12,9 +12,16 @@
     <marquee class="header">🌲 Welcome to TreeChat - The AI Chatbot with a Retro Twist! 🌲</marquee>
 
     <div class="chat-container">
+        <select id="room-select" onchange="changeRoom()">
+            <option value="general">🌍 General</option>
+            <option value="technology">💻 Technology</option>
+            <option value="gaming">🎮 Gaming</option>
+        </select>
+
         <div id="chat-box">
             <div class="bot-message">🤖 Hi! I'm ArborMind. How can I assist you today?</div>
         </div>
+        <p id="typing-indicator"></p>
 
         <div class="input-area">
             <input type="text" id="user-input" placeholder="Type a message..." autofocus>
